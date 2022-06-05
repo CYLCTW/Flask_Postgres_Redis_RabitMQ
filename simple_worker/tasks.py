@@ -32,8 +32,15 @@ def Send_Message(user,mess):
                str(user) + "," + \
                str(mess) + ");")
     print("Done")
-    g=Get_Message()
+    query = "" + \
+            "SELECT * " + \
+            "FROM Logger2 "
+    result_set = db.execute(query)
+    dannie = ""
+    for (r) in result_set:
+        dannie = dannie + "User: " + (str(r[0])) + " Message: " + (str(r[1])) + "\n"
 
+    redis.setex(query, 3600, dannie)
     r="Send message"
     return r
 @app.task()
